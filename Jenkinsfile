@@ -1,33 +1,42 @@
 pipeline {
     agent any
-
     stages {
         stage('Cleanup') {
             steps {
                 cleanWs()
             }
         }
-        stage('Checkout') {
+
+        stage('Cleanup') {
             steps {
-                checkout scm
+                sh 'ls -l'
             }
         }
-        stage('Build') {
-            steps {
-                echo 'Building..'
-                dir('app'){
-                    sh '''
-                        docker build -t msalim22/todolist .'
-                    '''
-                }
-            }
-        }
+
+        // stage('Build and Push') {
+        //     steps {
+        //         echo 'Building..'
+        //         dir('app'){
+        //             withCredentials([usernamePassword(credentialsId: 'DockerHubPwd', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        //                 sh '''
+        //                     docker build -t msalim22/todolist .
+        //                     docker login -u ${USERNAME} -p ${PASSWORD}
+        //                     docker push msalim22/todolist
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
         // stage('Deploy') {
         //     steps {
         //         sshagent(['ssh-key']) {
-        //             sh 'pwd'
-        //             sh 'scp -o StrictHostKeyChecking=no artifact.zip root@3.96.152.145:/var/www/html/'
-        //             sh 'ssh -tt root@3.96.152.145 -o StrictHostKeyChecking=no "cd /var/www/html/; unzip -o artifact.zip; rm artifact.zip"'
+        //             withCredentials([usernamePassword(credentialsId: 'DockerHubPwd', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        //                 sh '''
+        //                     ssh -tt root@<APP_HOST_VM_IP> -o StrictHostKeyChecking=no "docker pull msalim22/todolist"
+        //                     ssh -tt root@<APP_HOST_VM_IP> -o StrictHostKeyChecking=no "docker stop todolist-app || true && docker rm todolist-app || true"
+        //                     ssh -tt root@<APP_HOST_VM_IP> -o StrictHostKeyChecking=no "docker run --name todolist-app -d -p 3000:3000 msalim22/todolist"
+        //                 '''
+        //             }
         //         }
         //     }
         // }
