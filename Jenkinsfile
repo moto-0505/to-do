@@ -20,6 +20,12 @@ pipeline {
             }
         }
 
+        stage('Test container'){
+            steps {
+                sh 'curl -I localhost:300'
+            }
+        }
+
         stage('Build and Push') {
             steps {
                 echo 'Building..'
@@ -40,6 +46,12 @@ pipeline {
                 echo "deploying container"
                 sh 'docker stop todo-app || true && docker rm todo-app || true'
                 sh 'docker run --name todo-app -d -p 3000:3000 msalim22/todo-list-app:v2'
+            }
+        }
+
+        stage('Test container'){
+            steps {
+                sh 'curl -I localhost:3000'
             }
         }
     }
