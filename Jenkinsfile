@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Test container'){
+        stage('Test'){
             steps {
                 sh 'curl -I localhost:300'
             }
